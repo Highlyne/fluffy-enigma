@@ -1,7 +1,9 @@
+const axios = require("axios");
 const router = require("express").Router();
-const scrapeController = require("../../controllers/scrapeController");
+const scrapeController = require("../../scripts/scrape");
 
-router.route("/api/fetch")
-.get(scrapeController.scrapeHeadlines);
+router.route("/scrape")
+.get(scrapeController.scrape)
+console.log("scrape route is hooked up");
 
 module.exports = router;

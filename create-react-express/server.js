@@ -1,28 +1,38 @@
+// Require Node Packages
+// ===============================================
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-// const routes = require("./routes");
+
+// Initialize Express
+// ==============================================
+// const routes = require("./routes"); ------Delete when everything is working
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-// Configure body parser for AJAX requests
+// Configure body parser
+// ================================================
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Add routes, both API and view
-// app.use(routes);
+// app.use(routes); -------  Delete when everything is working
 
+// Config for Database
+// ======================================================
+// Serve up static assets (usually on heroku)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 // Set up promises with mongoose
 mongoose.Promise = global.Promise;
 // Connect to the Mongo DB
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/webScraper",
+  process.env.MONGODB_URI || "mongodb://localhost/webScraperdb",
 );
-// Start the API server
+
+// Start the server
+// ====================================================
 app.listen(PORT, function() {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });

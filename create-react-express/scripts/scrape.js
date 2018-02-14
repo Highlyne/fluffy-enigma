@@ -2,15 +2,28 @@
 // =============
 
 // Require axios and cheerio, making our scrapes possible
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require("axios");
+const cheerio = require("cheerio");
+const mongoose = require("mongoose");
+const db = require("../models");
+mongoose.Promise = global.Promise;
 
+// This runs the scraping script and puts data in DB
+
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost/webScraperdb",
+  {
+    useMongoClient: true
+  }
+);
+
+module.exports = {
 // This function will scrape the NYTimes website
-var scrape = function() {
+ scrape: function() {
   // Scrape the NYTimes website
   return axios.get("http://www.nytimes.com").then(function(res) {
     var $ = cheerio.load(res.data);
-    // Make an empty array to save our article info
+    // Make an empty array to save the article info
     var articles = [];
 
     // Now, find and loop through each element that has the "theme-summary" class
@@ -49,17 +62,23 @@ var scrape = function() {
 
         var dataToAdd = {
           title: headNeat,
-          synopsis: sumNeat,
-          link: url
+          link: url,
+          synopsis: sumNeat
         };
-
-        articles.push(dataToAdd);
-        console.log("scrape script is talking");
+        db.Article.create(dataToAdd)
+        .then(function(articles) {
+          // View the added result in the console
+          // console.log(articles);
+          var news = articles;
+          console.log("news", news);
+            })
+        .catch(function(err) {
+          // If an error occurred, send it to the client
+          return res.json(err);
+        })
+    // return articles;
       }
     });
-    return articles;
-  });
+  })
+ }
 };
-
-// Export the function, so other files in our backend can use it
-module.exports = scrape;

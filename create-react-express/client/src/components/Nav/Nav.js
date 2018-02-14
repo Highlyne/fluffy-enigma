@@ -10,7 +10,7 @@ const Nav = () =>
       <ul className="nav navbar-nav">
         <li className="active"><a href="/">Home</a></li>
         <li><a href="/saved">Saved Articles</a></li>
-        <li><a className="btn btn-danger scrape-new">SCRAPE NEW ARTICLES!</a></li>
+        <li><a className="btn btn-danger scrape-new" onClick={this.handleFormSubmit}>SCRAPE NEW ARTICLES!</a></li>
       </ul>
     </div>
   </nav>;
